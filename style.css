@@ -239,7 +239,6 @@ header.scrolled{
 ========================================================= */
 
 .hero{
-<<<<<<< HEAD
     height:100vh;
     background:url("wp12899140.jpg") center/cover no-repeat;
     position:relative;
@@ -247,7 +246,6 @@ header.scrolled{
     justify-content:center;
     align-items:center;
     text-align:center;
-=======
   min-height:92vh;
   position:relative;
   display:flex; align-items:center; justify-content:center; text-align:center;
@@ -257,7 +255,6 @@ header.scrolled{
     var(--white);
   overflow:hidden;
   padding:150px 24px 100px;
->>>>>>> 16c3408 (Add new pages and update styles)
 }
 
 .hero-bg{ position:absolute; inset:0; opacity:.7; }
@@ -333,124 +330,7 @@ header.scrolled{
 .highlight-card h3{ font-size:18px; margin-bottom:8px; }
 .highlight-card p{ color:var(--steel); font-size:14.5px; }
 
-<<<<<<< HEAD
-.about-content h2{
-    font-size:40px;
-    margin-bottom:20px;
-}
-
-.about-content p{
-    margin-bottom:20px;
-    color:#666;
-}
-
-.about-content li{
-    margin-bottom:12px;
-    font-weight:500;
-}
-
-/* =========================
-   SECTION TITLE
-========================= */
-
-.section-title{
-    text-align:center;
-    margin-bottom:60px;
-
-}
-
-.section-title h2{
-    font-size:42px;
-    margin-bottom:10px;
-    color:#ffffff;
-}
-
-.section-title p{
-    color:#ffffff;
-}
-
-/* =========================
-   SERVICES
-========================= */
-
-.services{
-    padding:100px 7%;
-    background:#0056ff;
-}
-
-.service-container{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:30px;
-}
-
-.service-card{
-    background:#fff;
-    padding:40px;
-    border-radius:15px;
-    text-align:center;
-    transition:.4s;
-    box-shadow:0 8px 25px rgba(233, 225, 225, 0.08);
-}
-
-.service-card:hover{
-    transform:translateY(-10px);
-}
-
-.service-card i{
-    font-size:50px;
-    color:#296df4;
-    margin-bottom:20px;
-}
-
-.service-card h3{
-    margin-bottom:15px;
-}
-
-/* =========================
-   PRODUCTS
-========================= */
-
-.products{
-    padding:100px 7%;
-}
-
-.product-container{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:30px;
-}
-
-.product-card{
-    overflow:hidden;
-    border-radius:15px;
-    background:#fff;
-    box-shadow:0 10px 25px rgba(0,0,0,.08);
-    transition:.4s;
-}
-
-.product-card:hover{
-    transform:translateY(-8px);
-}
-
-.product-card img{
-    height:230px;
-    object-fit:cover;
-}
-
-.product-card h3{
-    padding:20px;
-}
-
-.product-card p{
-    padding:0 20px 25px;
-    color:#666666;
-}
-
-/* =========================
-=======
 /* =========================================================
->>>>>>> 16c3408 (Add new pages and update styles)
    STATS
 ========================================================= */
 
