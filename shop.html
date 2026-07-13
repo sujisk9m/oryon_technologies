@@ -46,6 +46,26 @@
     </button>
   </nav>
 </header>
+<!-- ================= CART DRAWER ================= -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <h3><i class="fas fa-cart-shopping"></i> Your Cart</h3>
+    <button class="cart-close" id="cart-close" aria-label="Close cart"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-empty" id="cart-empty">
+    <i class="fas fa-cart-shopping"></i>
+    <span>Your cart is empty.<br>Add something from the Shop.</span>
+  </div>
+  <div class="cart-drawer-footer">
+    <div class="cart-subtotal-row">
+      <span>Subtotal</span>
+      <span id="cart-subtotal">₹0.00</span>
+    </div>
+    <button class="btn btn-primary cart-checkout" id="cart-checkout">Checkout</button>
+  </div>
+</aside>
 
 <!-- ================= PAGE HEADER ================= -->
 <section class="page-header page-header-dark">
@@ -66,8 +86,13 @@
         <div class="product-body">
           <span class="product-name">WORK STATION (For Kids)</span>
           <span class="product-vendor">Oryon Technologies</span>
+<<<<<<< HEAD
           <span class="product-price">₹1,000.00</span>
           <button class="add-to-cart">
+=======
+          <span class="product-price">₹1,499.00</span>
+          <button class="add-to-cart" data-name="IoT Sensor Starter Pack" data-price="1499.00" data-icon="fas fa-satellite-dish">
+>>>>>>> 384b295 (Update website layout and reorganize images)
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -80,7 +105,7 @@
           <span class="product-name">ESP32 Development Board</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹699.00</span>
-          <button class="add-to-cart">
+          <button class="add-to-cart" data-name="ESP32 Development Board" data-price="699.00" data-icon="fas fa-microchip">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -93,7 +118,7 @@
           <span class="product-name">Robotics Starter Kit</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹4,999.00</span>
-          <button class="add-to-cart">
+          <button class="add-to-cart" data-name="Robotics Starter Kit" data-price="4999.00" data-icon="fas fa-robot">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -106,7 +131,7 @@
           <span class="product-name">LoRa Communication Module</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹2,199.00</span>
-          <button class="add-to-cart">
+          <button class="add-to-cart" data-name="LoRa Communication Module" data-price="2199.00" data-icon="fas fa-tower-broadcast">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -119,7 +144,7 @@
           <span class="product-name">Arduino Uno Board</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹549.00</span>
-          <button class="add-to-cart">
+          <button class="add-to-cart" data-name="Arduino Uno Board" data-price="549.00" data-icon="fas fa-layer-group">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -132,7 +157,7 @@
           <span class="product-name">Embedded Components Pack</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹899.00</span>
-          <button class="add-to-cart">
+          <button class="add-to-cart" data-name="Embedded Components Pack" data-price="899.00" data-icon="fas fa-plug-circle-bolt">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -145,7 +170,7 @@
           <span class="product-name">Electronic Accessories Kit</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹399.00</span>
-          <button class="add-to-cart">
+          <button class="add-to-cart" data-name="Electronic Accessories Kit" data-price="399.00" data-icon="fas fa-plug">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
@@ -170,24 +195,78 @@
 <footer>
   <div class="container footer-container">
 
+    <!-- Brand -->
     <div class="footer-box footer-brand">
-      <span class="logo-text footer-logo">ORYON<span>TECHNOLOGIES</span></span>
-      <p>Building the future through robotics, IoT and intelligent engineering.</p>
+      <span class="logo-text footer-logo">
+        ORYON <span>TECHNOLOGIES</span>
+      </span>
+      <p>
+        Building the future through robotics, IoT and intelligent engineering.
+      </p>
     </div>
 
-    <div class="footer-box">
-      <h3>Follow</h3>
-      <div class="social">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <!-- Newsletter -->
+    <div class="footer-box newsletter">
+      <h3>Connect With Us</h3>
+
+      <form id="newsletter-form">
+
+        <div class="newsletter-field">
+          <label for="newsletter-email">Email *</label>
+          <input
+            type="email"
+            id="newsletter-email"
+            placeholder="you@example.com"
+            required
+          >
+        </div>
+
+        <label class="newsletter-check">
+          <input type="checkbox" required>
+          Yes, subscribe me to your newsletter.
+        </label>
+
+        <div class="newsletter-sub-msg">
+          You're subscribed — thank you!
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          Submit
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box footer-contact">
+      <h3>Get in Touch</h3>
+
+      <div class="footer-contact-line">
+        <i class="fas fa-phone"></i>
+        <span>+91 98765 43210</span>
+      </div>
+
+      <div class="footer-contact-line">
+        <i class="fas fa-envelope"></i>
+        <span>hello@oryontech.com</span>
+      </div>
+
+      <div class="footer-contact-line">
+        <i class="fas fa-location-dot"></i>
+        <span>Oryon Technologies, Chennai, Tamil Nadu, India</span>
+      </div>
+
+      <div class="footer-contact-line">
+        <i class="fas fa-clock"></i>
+        <span>Mon–Sat, 9:30 AM–6:30 PM (IST)</span>
       </div>
     </div>
 
   </div>
 
-  <div class="copyright">© 2026 Oryon Technologies. All Rights Reserved.</div>
+  <div class="copyright">
+    © 2026 Oryon Technologies. All Rights Reserved.
+  </div>
 </footer>
 
 <script src="scripts.js"></script>
