@@ -29,7 +29,28 @@ html{ scroll-behavior:smooth; }
 
 body{
   font-family:var(--font-body);
-  color:var(--ink);
+  color:var(--ink);.footer-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:80px;
+}
+
+.footer-box{
+    flex:1;
+}
+
+.footer-brand{
+    max-width:320px;
+}
+
+.newsletter{
+    max-width:340px;
+}
+
+.footer-contact{
+    max-width:340px;
+}
   background:var(--white);
   line-height:1.65;
   -webkit-font-smoothing:antialiased;
@@ -200,23 +221,23 @@ header.scrolled{
 
 .page-header{
   position:relative;
-  padding:170px 24px 80px;
-  text-align:center;
+  padding:110px 24px 10px;
+  text-align:left;
   overflow:hidden;
   background:
     radial-gradient(ellipse at 18% 20%, rgba(63,169,245,0.14), transparent 55%),
     radial-gradient(ellipse at 85% 80%, rgba(63,169,245,0.1), transparent 50%),
     var(--white);
-  border-bottom:1px solid var(--line);
+  border-bottom:none;
 }
 .page-header .page-header-content h1{ color:var(--ink); }
 .page-header .page-header-sub{ color:var(--steel); }
 .page-header-dark{ background:inherit; }
 
-.page-header-content{ position:relative; z-index:2; max-width:720px; margin:auto; }
-.page-header-content .eyebrow{ justify-content:center; }
-.page-header-content h1{ font-size:clamp(32px,5vw,54px); margin-bottom:14px; }
-.page-header-sub{ color:var(--steel); font-size:16.5px; }
+.page-header-content{ position:relative; z-index:2; max-width:720px; margin-left: 0; margin-right:auto; }
+.page-header-content .eyebrow{ justify-content:flex-start; }
+.page-header-content h1{ font-size:clamp(30px,5vw,44px); margin: 10px; text-align: left; }
+.page-header-sub{ color:var(--steel); font-size:16.5px; text-align: left; }
 
 /* =========================================================
    CTA STRIP (used between page content and footer)
@@ -239,6 +260,7 @@ header.scrolled{
 ========================================================= */
 
 .hero{
+<<<<<<< HEAD
     height:100vh;
     background:url("wp12899140.jpg") center/cover no-repeat;
     position:relative;
@@ -246,6 +268,8 @@ header.scrolled{
     justify-content:center;
     align-items:center;
     text-align:center;
+=======
+>>>>>>> 384b295 (Update website layout and reorganize images)
   min-height:92vh;
   position:relative;
   display:flex; align-items:center; justify-content:center; text-align:center;
@@ -369,7 +393,7 @@ header.scrolled{
    ABOUT
 ========================================================= */
 
-.about{ padding:120px 0; background:var(--white); }
+.about{ padding:12px 0; background:var(--white); }
 
 .about-grid{
   display:grid;
@@ -668,13 +692,13 @@ header.scrolled{
    CONTACT
 ========================================================= */
 
-.contact{ background:var(--white); padding:110px 0 100px; }
+.contact{ background:var(--white); padding:40px 0 100px; }
 .contact-page{ padding-top:90px; }
 
 .contact-cta{
-  text-align:center; max-width:680px; margin-bottom:70px;
+  text-align:center; max-width:680px; margin-bottom:680px;
 }
-.contact-cta h2{ font-size:clamp(28px,3.6vw,40px); margin-bottom:16px; }
+.contact-cta h2{ font-size:clamp(28px,3.6vw,40px); margin-bottom:16px; margin:0 auto 20px; }
 .contact-cta p{ color:var(--steel); font-size:16px; }
 
 .contact-grid{
@@ -891,12 +915,135 @@ footer{ background:var(--white); color:var(--ink); padding-top:80px; border-top:
   margin-bottom:22px;
 }
 
+/* =========================================================
+   CART DRAWER
+========================================================= */
+
+.cart-overlay{
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(15,30,45,0.35);
+  opacity:0; pointer-events:none;
+  transition:opacity .35s var(--ease);
+}
+.cart-overlay.show{ opacity:1; pointer-events:auto; }
+
+.cart-drawer{
+  position:fixed; top:0; right:-420px; z-index:1001;
+  width:min(400px,92%); height:100vh;
+  background:#fff;
+  box-shadow:-24px 0 60px rgba(22,35,47,0.2);
+  display:flex; flex-direction:column;
+  transition:right .45s var(--ease);
+}
+.cart-drawer.open{ right:0; }
+
+.cart-drawer-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:24px 26px; border-bottom:1px solid var(--line);
+}
+.cart-drawer-header h3{ font-size:18px; display:flex; align-items:center; gap:10px; }
+.cart-drawer-header h3 i{ color:var(--blue); font-size:16px; }
+.cart-close{
+  width:36px; height:36px; border-radius:50%; border:none;
+  background:var(--blue-pale); color:var(--blue-dark);
+  cursor:pointer; font-size:14px; transition:background .3s, color .3s;
+}
+.cart-close:hover{ background:var(--blue); color:#fff; }
+
+.cart-items{ flex:1; overflow-y:auto; padding:8px 22px; }
+
+.cart-item{
+  display:flex; align-items:center; gap:14px;
+  padding:16px 4px; border-bottom:1px solid var(--line);
+}
+.cart-item-icon{
+  width:46px; height:46px; border-radius:12px; flex-shrink:0;
+  background:var(--blue-pale); color:var(--blue);
+  display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.cart-item-info{ flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
+.cart-item-name{ font-size:14px; font-weight:600; color:var(--ink); }
+.cart-item-meta{ font-size:12px; color:var(--steel); font-family:var(--font-mono); }
+.cart-item-remove{
+  background:none; border:none; color:var(--steel-light);
+  font-size:15px; cursor:pointer; padding:8px; transition:color .3s;
+}
+.cart-item-remove:hover{ color:#E0435C; }
+
+.cart-empty{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:16px; padding:70px 24px; text-align:center; color:var(--steel-light);
+}
+.cart-empty i{ font-size:40px; color:var(--blue-pale); }
+.cart-empty span{ font-size:14px; }
+
+.cart-drawer-footer{ padding:22px 26px; border-top:1px solid var(--line); }
+.cart-subtotal-row{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:15px; color:var(--ink); margin-bottom:16px;
+}
+.cart-subtotal-row span:last-child{ font-family:var(--font-mono); font-weight:700; color:var(--blue-dark); }
+.cart-checkout{ width:100%; justify-content:center; }
+
+/* =========================================================
+   FOOTER — NEWSLETTER / CONTACT / LEGAL
+========================================================= */
+
+.footer-secondary{
+  border-top:1px solid var(--line);
+  padding:56px 0;
+}
+.footer-secondary-grid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr;
+  gap:44px;
+}
+.footer-secondary h3{ font-size:16px; margin-bottom:18px; }
+
+.newsletter-field label{ display:block; font-size:13px; color:var(--steel); margin-bottom:8px; }
+.newsletter-field input[type="email"]{
+  width:100%; padding:14px 16px;
+  border:1.5px solid var(--line); border-radius:var(--radius-sm);
+  font-family:var(--font-body); font-size:14px;
+  background:var(--blue-pale-2);
+  margin-bottom:16px;
+  transition:border-color .3s;
+  outline:none;
+}
+.newsletter-field input[type="email"]:focus{ border-color:var(--blue); }
+
+.newsletter-check{
+  display:flex; align-items:flex-start; gap:10px;
+  margin-bottom:18px; font-size:13.5px; color:var(--steel);
+}
+.newsletter-check input{ margin-top:3px; accent-color:var(--blue); }
+
+.newsletter-sub-msg{
+  font-size:13px; color:#1FAE6B; margin-top:-8px; margin-bottom:14px;
+  display:none;
+}
+.newsletter-sub-msg.show{ display:block; }
+
+.footer-contact-line{
+  display:flex; gap:10px; align-items:flex-start;
+  font-size:14px; color:var(--steel); margin-bottom:14px;
+}
+.footer-contact-line i{ color:var(--blue); width:16px; margin-top:3px; flex-shrink:0; }
+
+.footer-legal li{ margin-bottom:11px; }
+.footer-legal a{ font-size:14px; color:var(--steel); transition:color .3s; }
+.footer-legal a:hover{ color:var(--blue-dark); }
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (max-width:1024px){
   .about-grid{ grid-template-columns:1fr; gap:50px; }
   .about-visual{ max-width:360px; margin:0 auto; }
   .contact-grid{ grid-template-columns:1fr; }
   .footer-container{ grid-template-columns:1fr 1fr; }
+  .footer-secondary-grid{ grid-template-columns:1fr; gap:36px; }
 }
 
 @media (max-width:900px){
