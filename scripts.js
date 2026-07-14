@@ -26,10 +26,6 @@ navLinks.querySelectorAll('a').forEach(link => {
 });
 
 // ================= SCROLL REVEAL (progressive enhancement) =================
-// Elements are visible by default in CSS. Only if this script runs do we
-// add .pre-anim (which starts them hidden) and then reveal them as they
-// scroll into view. This means the page is always readable even if JS
-// fails to load or run.
 const revealEls = document.querySelectorAll('.reveal');
 
 if ('IntersectionObserver' in window && revealEls.length) {
@@ -124,7 +120,7 @@ const renderCart = () => {
     cartBadge.classList.toggle('show', count > 0);
   }
 
-  if (!cartItemsEl) return; // this page has no drawer markup
+  if (!cartItemsEl) return;
 
   cartItemsEl.innerHTML = '';
   if (cart.length === 0) {
@@ -228,3 +224,42 @@ if (newsletterForm) {
     }, 2600);
   });
 }
+
+// ================= DETAIL MODAL (Achievements / Projects) =================
+// Works on any page that has: #detail-overlay, #detail-modal-body, #detail-close
+// and cards with [data-detail="template-id"] pointing to a <template id="template-id"> block.
+const detailOverlay   = document.getElementById('detail-overlay');
+const detailModalBody = document.getElementById('detail-modal-body');
+const detailClose     = document.getElementById('detail-close');
+
+const openDetail = (templateId) => {
+  const tpl = document.getElementById(templateId);
+  if (!tpl || !detailModalBody || !detailOverlay) return;
+  detailModalBody.innerHTML = '';
+  detailModalBody.appendChild(tpl.content.cloneNode(true));
+  detailOverlay.classList.add('show');
+  document.body.style.overflow = 'hidden';
+};
+
+const closeDetail = () => {
+  detailOverlay?.classList.remove('show');
+  document.body.style.overflow = '';
+};
+
+document.querySelectorAll('[data-detail]').forEach(card => {
+  card.addEventListener('click', () => openDetail(card.dataset.detail));
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openDetail(card.dataset.detail);
+    }
+  });
+});
+
+detailClose?.addEventListener('click', closeDetail);
+detailOverlay?.addEventListener('click', (e) => {
+  if (e.target === detailOverlay) closeDetail();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeDetail();
+});
