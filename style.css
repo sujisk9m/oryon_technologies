@@ -1033,6 +1033,7 @@ footer{ background:var(--white); color:var(--ink); padding-top:80px; border-top:
   .nav-links.active{ right:0; }
   .nav-links a{ font-size:18px; }
   .menu-btn{ display:block; }
+  .nav-cart{ margin-left:auto; }
 
   .highlight-grid{ margin-top:0; }
   .hero{ padding-top:120px; }
