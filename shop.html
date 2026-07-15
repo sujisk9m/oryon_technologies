@@ -83,54 +83,78 @@
     <div class="shop-grid">
 
       <div class="product-card reveal">
-        <div class="product-media"><img src="images/WhatsApp Image 2026-07-13 at 1.22.24 PM.jpeg"></div>
+        <div class="product-media" data-detail="prod-1-detail" style="cursor: pointer;"><img src="images/WhatsApp Image 2026-07-13 at 1.22.24 PM.jpeg"></div>
         <div class="product-body">
           <span class="product-name">WORK STATION (For Kids)</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹1,000.00</span>
+          <div class="product-quantity">
+            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+            <input type="number" class="qty-input" value="1" min="1" readonly>
+            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+          </div>
           <button class="add-to-cart" data-name="IWORK STATION (For Kids)" data-price="1000.00">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
+          <span class="product-more" data-detail="prod-1-detail">View details <i class="fas fa-arrow-right"></i></span>
         </div>
       </div>
 
       <div class="product-card reveal">
-        <div class="product-media"><img src="images/IOT Trainer Kit.png"></div>
+        <div class="product-media" data-detail="prod-2-detail" style="cursor: pointer;"><img src="images/IOT Trainer Kit.png"></div>
         <div class="product-body">
           <span class="product-name">IOT Trainer Kit</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹5,299.00</span>
+          <div class="product-quantity">
+            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+            <input type="number" class="qty-input" value="1" min="1" readonly>
+            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+          </div>
           <button class="add-to-cart" data-name="IOT Trainer Kit" data-price="5299.00">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
+          <span class="product-more" data-detail="prod-2-detail">View details <i class="fas fa-arrow-right"></i></span>
         </div>
       </div>
 
       <div class="product-card reveal">
-        <div class="product-media"><img src="images/AUDAPS 3.png"></div>
+        <div class="product-media" data-detail="prod-3-detail" style="cursor: pointer;"><img src="images/AUDAPS 3.png"></div>
         <div class="product-body">
           <span class="product-name">AUDAPS</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹12,000.00</span>
+          <div class="product-quantity">
+            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+            <input type="number" class="qty-input" value="1" min="1" readonly>
+            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+          </div>
           <button class="add-to-cart" data-name="Robotics Starter Kit" data-price="12000.00">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
+          <span class="product-more" data-detail="prod-3-detail">View details <i class="fas fa-arrow-right"></i></span>
         </div>
       </div>
 
       <div class="product-card reveal">
-        <div class="product-media"><img src="images/Robotic dog.png"></div>
+        <div class="product-media" data-detail="prod-4-detail" style="cursor: pointer;"><img src="images/Robotic dog.png"></div>
         <div class="product-body">
           <span class="product-name">Robotic Dog</span>
           <span class="product-vendor">Oryon Technologies</span>
           <span class="product-price">₹1,000.00</span>
+          <div class="product-quantity">
+            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+            <input type="number" class="qty-input" value="1" min="1" readonly>
+            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+          </div>
           <button class="add-to-cart" data-name="Robotic Dog" data-price="1000.00">
             <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
             <span class="cta-label">Add to Cart</span>
           </button>
+          <span class="product-more" data-detail="prod-4-detail">View details <i class="fas fa-arrow-right"></i></span>
         </div>
       </div>
     </div>
@@ -224,6 +248,110 @@
     © 2026 Oryon Technologies. All Rights Reserved.
   </div>
 </footer>
+
+<!-- ================= DETAIL MODAL (shared shell) ================= -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-modal" role="dialog" aria-modal="true">
+    <button class="detail-close" id="detail-close" aria-label="Close"><i class="fas fa-xmark"></i></button>
+    <div id="detail-modal-body"><!-- content injected here on click --></div>
+  </div>
+</div>
+
+<!-- ================= DETAIL TEMPLATES (edit content here) ================= -->
+<template id="prod-1-detail">
+  <div class="detail-icon"><i class="fas fa-briefcase"></i></div>
+  <span class="detail-tag">Electronics Kit</span>
+  <h2>WORK STATION (For Kids)</h2>
+  <p class="detail-price">Price: ₹1,000.00</p>
+  <p>A fun and educational workshop organizer specifically designed for kids. It helps children learn the basics of assembly, organization, and safety when working on small electronics and robotics projects.</p>
+  <h4>Features &amp; Specifications</h4>
+  <ul class="detail-list">
+    <li>Built-in tool storage slots and compartments</li>
+    <li>Sturdy, child-safe structural material</li>
+    <li>Perfect companion for DIY electronics projects</li>
+  </ul>
+  <div class="product-quantity" style="margin-bottom: 16px;">
+    <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+    <input type="number" class="qty-input" value="1" min="1" readonly>
+    <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-primary modal-buy-now" data-name="IWORK STATION (For Kids)" data-price="1000.00" data-icon="fas fa-briefcase">Buy Now</button>
+    <button class="btn btn-ghost modal-add-to-cart" data-name="IWORK STATION (For Kids)" data-price="1000.00" data-icon="fas fa-briefcase">Add to Cart</button>
+  </div>
+</template>
+
+<template id="prod-2-detail">
+  <div class="detail-icon"><i class="fas fa-microchip"></i></div>
+  <span class="detail-tag">IoT Development</span>
+  <h2>IOT Trainer Kit</h2>
+  <p class="detail-price">Price: ₹5,299.00</p>
+  <p>A comprehensive educational trainer kit for learning IoT concepts and cloud integrations. Equipped with development boards and a wide array of sensors.</p>
+  <h4>Features &amp; Specifications</h4>
+  <ul class="detail-list">
+    <li>ESP32 core development board with Wi-Fi &amp; Bluetooth</li>
+    <li>Sensors: Temperature, Humidity, Soil Moisture, and Ultrasonic</li>
+    <li>128x64 OLED Display and dynamic RGB LED controls</li>
+    <li>Full guide and code templates included</li>
+  </ul>
+  <div class="product-quantity" style="margin-bottom: 16px;">
+    <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+    <input type="number" class="qty-input" value="1" min="1" readonly>
+    <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-primary modal-buy-now" data-name="IOT Trainer Kit" data-price="5299.00" data-icon="fas fa-microchip">Buy Now</button>
+    <button class="btn btn-ghost modal-add-to-cart" data-name="IOT Trainer Kit" data-price="5299.00" data-icon="fas fa-microchip">Add to Cart</button>
+  </div>
+</template>
+
+<template id="prod-3-detail">
+  <div class="detail-icon"><i class="fas fa-water"></i></div>
+  <span class="detail-tag">Marine Technology</span>
+  <h2>AUDAPS — Underwater Platform</h2>
+  <p class="detail-price">Price: ₹12,000.00</p>
+  <p>Our premier autonomous data collection platform designed for sub-surface monitoring. Configurable with custom scientific sensor payloads.</p>
+  <h4>Features &amp; Specifications</h4>
+  <ul class="detail-list">
+    <li>IP68 rated modular structural body</li>
+    <li>Sensors: Water Temperature, Turbidity, and pH levels</li>
+    <li>Continuous data logging to internal flash memory</li>
+    <li>Wireless data transmission when surfaced</li>
+  </ul>
+  <div class="product-quantity" style="margin-bottom: 16px;">
+    <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+    <input type="number" class="qty-input" value="1" min="1" readonly>
+    <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-primary modal-buy-now" data-name="Robotics Starter Kit" data-price="12000.00" data-icon="fas fa-water">Buy Now</button>
+    <button class="btn btn-ghost modal-add-to-cart" data-name="Robotics Starter Kit" data-price="12000.00" data-icon="fas fa-water">Add to Cart</button>
+  </div>
+</template>
+
+<template id="prod-4-detail">
+  <div class="detail-icon"><i class="fas fa-dog"></i></div>
+  <span class="detail-tag">Robotics Kit</span>
+  <h2>Robotic Dog Kit</h2>
+  <p class="detail-price">Price: ₹1,000.00</p>
+  <p>An interactive, quadruped robot kit that teaches servo control, motor alignment, and basic walk cycle coding.</p>
+  <h4>Features &amp; Specifications</h4>
+  <ul class="detail-list">
+    <li>4-legged chassis with SG90 micro servos</li>
+    <li>Ultrasonic sensor for obstacle avoidance</li>
+    <li>Programmable walk, sit, and dance sequences</li>
+    <li>Easy assembly with screw-together parts</li>
+  </ul>
+  <div class="product-quantity" style="margin-bottom: 16px;">
+    <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+    <input type="number" class="qty-input" value="1" min="1" readonly>
+    <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-primary modal-buy-now" data-name="Robotic Dog" data-price="1000.00" data-icon="fas fa-dog">Buy Now</button>
+    <button class="btn btn-ghost modal-add-to-cart" data-name="Robotic Dog" data-price="1000.00" data-icon="fas fa-dog">Add to Cart</button>
+  </div>
+</template>
 
 <script src="scripts.js"></script>
 </body>

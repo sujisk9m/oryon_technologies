@@ -134,7 +134,14 @@ const renderCart = () => {
         '<div class="cart-item-icon"><i class="' + (item.icon || 'fas fa-box') + '"></i></div>' +
         '<div class="cart-item-info">' +
           '<span class="cart-item-name">' + item.name + '</span>' +
-          '<span class="cart-item-meta">' + formatPrice(item.price) + ' &times; ' + item.qty + '</span>' +
+          '<div class="cart-item-meta">' +
+            '<span>' + formatPrice(item.price) + '</span>' +
+            '<div class="cart-qty-ctrl">' +
+              '<button class="cart-qty-btn cart-qty-minus" data-idx="' + idx + '" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>' +
+              '<span class="cart-qty-val">' + item.qty + '</span>' +
+              '<button class="cart-qty-btn cart-qty-plus" data-idx="' + idx + '" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
         '<button class="cart-item-remove" data-idx="' + idx + '" aria-label="Remove item"><i class="fas fa-xmark"></i></button>';
       cartItemsEl.appendChild(row);
@@ -144,6 +151,7 @@ const renderCart = () => {
   const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   if (cartSubtotalEl) cartSubtotalEl.textContent = formatPrice(subtotal);
 
+  // Cart item remove listener
   cartItemsEl.querySelectorAll('.cart-item-remove').forEach(btn => {
     btn.addEventListener('click', () => {
       const c = getCart();
@@ -152,7 +160,55 @@ const renderCart = () => {
       renderCart();
     });
   });
+
+  // Cart item decrement listener
+  cartItemsEl.querySelectorAll('.cart-qty-minus').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = getCart();
+      const idx = Number(btn.dataset.idx);
+      if (c[idx].qty > 1) {
+        c[idx].qty -= 1;
+        saveCart(c);
+        renderCart();
+      } else {
+        c.splice(idx, 1);
+        saveCart(c);
+        renderCart();
+      }
+    });
+  });
+
+  // Cart item increment listener
+  cartItemsEl.querySelectorAll('.cart-qty-plus').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const c = getCart();
+      const idx = Number(btn.dataset.idx);
+      c[idx].qty += 1;
+      saveCart(c);
+      renderCart();
+    });
+  });
 };
+
+// Product quantity card selectors logic
+document.querySelectorAll('.product-card').forEach(card => {
+  const minusBtn = card.querySelector('.qty-minus');
+  const plusBtn = card.querySelector('.qty-plus');
+  const qtyInput = card.querySelector('.qty-input');
+
+  if (minusBtn && plusBtn && qtyInput) {
+    minusBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val > 1) {
+        qtyInput.value = val - 1;
+      }
+    });
+    plusBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      qtyInput.value = val + 1;
+    });
+  }
+});
 
 document.querySelectorAll('.add-to-cart').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -160,12 +216,21 @@ document.querySelectorAll('.add-to-cart').forEach(btn => {
     const name  = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
     const icon  = btn.dataset.icon;
+    
+    // Get quantity from the input
+    const card = btn.closest('.product-card');
+    const qtyInput = card ? card.querySelector('.qty-input') : null;
+    const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
+
     const cart = getCart();
     const existing = cart.find(i => i.name === name);
-    if (existing) existing.qty += 1;
-    else cart.push({ name, price, icon, qty: 1 });
+    if (existing) existing.qty += qtyToAdd;
+    else cart.push({ name, price, icon, qty: qtyToAdd });
     saveCart(cart);
     renderCart();
+
+    // Reset product quantity input to 1 after adding
+    if (qtyInput) qtyInput.value = 1;
 
     btn.classList.add('added');
     const label = btn.querySelector('.cta-label');
@@ -237,6 +302,81 @@ const openDetail = (templateId) => {
   if (!tpl || !detailModalBody || !detailOverlay) return;
   detailModalBody.innerHTML = '';
   detailModalBody.appendChild(tpl.content.cloneNode(true));
+
+  // Attach dynamic event listeners for the quantity selector inside the modal
+  const minusBtn = detailModalBody.querySelector('.qty-minus');
+  const plusBtn = detailModalBody.querySelector('.qty-plus');
+  const qtyInput = detailModalBody.querySelector('.qty-input');
+
+  if (minusBtn && plusBtn && qtyInput) {
+    minusBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val > 1) {
+        qtyInput.value = val - 1;
+      }
+    });
+    plusBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      qtyInput.value = val + 1;
+    });
+  }
+
+  // Attach dynamic event listeners for Buy Now & Add to Cart buttons inside the modal
+  const modalAddToCartBtn = detailModalBody.querySelector('.modal-add-to-cart');
+  const modalBuyNowBtn = detailModalBody.querySelector('.modal-buy-now');
+
+  if (modalAddToCartBtn) {
+    modalAddToCartBtn.addEventListener('click', () => {
+      const name = modalAddToCartBtn.dataset.name;
+      const price = parseFloat(modalAddToCartBtn.dataset.price);
+      const icon = modalAddToCartBtn.dataset.icon;
+      const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
+      
+      const cart = getCart();
+      const existing = cart.find(i => i.name === name);
+      if (existing) existing.qty += qtyToAdd;
+      else cart.push({ name, price, icon, qty: qtyToAdd });
+      saveCart(cart);
+      renderCart();
+
+      // Reset quantity input to 1 after adding
+      if (qtyInput) qtyInput.value = 1;
+
+      // Temporarily change button to "Added" state
+      const originalText = modalAddToCartBtn.innerHTML;
+      modalAddToCartBtn.innerHTML = 'Added <i class="fas fa-check"></i>';
+      modalAddToCartBtn.classList.add('added');
+      modalAddToCartBtn.disabled = true;
+      setTimeout(() => {
+        modalAddToCartBtn.innerHTML = originalText;
+        modalAddToCartBtn.classList.remove('added');
+        modalAddToCartBtn.disabled = false;
+      }, 1400);
+    });
+  }
+
+  if (modalBuyNowBtn) {
+    modalBuyNowBtn.addEventListener('click', () => {
+      const name = modalBuyNowBtn.dataset.name;
+      const price = parseFloat(modalBuyNowBtn.dataset.price);
+      const icon = modalBuyNowBtn.dataset.icon;
+      const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
+      
+      const cart = getCart();
+      const existing = cart.find(i => i.name === name);
+      if (existing) existing.qty += qtyToAdd;
+      else cart.push({ name, price, icon, qty: qtyToAdd });
+      saveCart(cart);
+      renderCart();
+
+      // Close details modal
+      closeDetail();
+
+      // Open cart drawer
+      openCart();
+    });
+  }
+
   detailOverlay.classList.add('show');
   document.body.style.overflow = 'hidden';
 };
