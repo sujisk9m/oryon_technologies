@@ -38,8 +38,6 @@
       <li><a href="projects.html" class="active">Projects</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-
-    <a href="contact.html" class="btn btn-primary nav-cta">Contact Us</a>
     <button class="nav-cart" aria-label="View cart">
       <i class="fas fa-cart-shopping"></i>
       <span class="cart-badge" id="cart-badge">0</span>
@@ -50,6 +48,27 @@
     </button>
   </nav>
 </header>
+
+<!-- ================= CART DRAWER ================= -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <h3><i class="fas fa-cart-shopping"></i> Your Cart</h3>
+    <button class="cart-close" id="cart-close" aria-label="Close cart"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-empty" id="cart-empty">
+    <i class="fas fa-cart-shopping"></i>
+    <span>Your cart is empty.<br>Add something from the Shop.</span>
+  </div>
+  <div class="cart-drawer-footer">
+    <div class="cart-subtotal-row">
+      <span>Subtotal</span>
+      <span id="cart-subtotal">₹0.00</span>
+    </div>
+    <button class="btn btn-primary cart-checkout" id="cart-checkout">Checkout</button>
+  </div>
+</aside>
 
 <!-- ================= PAGE HEADER ================= -->
 <section class="page-header projects-page">
@@ -188,6 +207,7 @@
 <!-- ================= DETAIL TEMPLATES (edit content here) ================= -->
 
 <template id="proj-1-detail">
+  <div class="detail-media"><img src="images/AUDAPS 3.png" alt="AUDAPS Underwater Platform"></div>
   <div class="detail-icon"><i class="fas fa-water"></i></div>
   <span class="detail-tag">In Development</span>
   <h2>AUDAPS — Autonomous Underwater Data Acquisition System</h2>
@@ -212,6 +232,7 @@
 </template>
 
 <template id="proj-2-detail">
+  <div class="detail-media"><img src="images/IOT Trainer Kit.png" alt="Smart Campus IoT Network"></div>
   <div class="detail-icon"><i class="fas fa-network-wired"></i></div>
   <span class="detail-tag">Completed &middot; 2023</span>
   <h2>Smart Campus IoT Network</h2>
@@ -234,6 +255,7 @@
 </template>
 
 <template id="proj-3-detail">
+  <div class="detail-media"><img src="images/Robotic dog.png" alt="Robotic Dog Kit"></div>
   <div class="detail-icon"><i class="fas fa-robot"></i></div>
   <span class="detail-tag">Completed &middot; 2022</span>
   <h2>Educational Robotic Arm Kit</h2>

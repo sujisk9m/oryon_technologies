@@ -45,8 +45,6 @@
       <li><a href="projects.html">Projects</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-
-    <a href="contact.html" class="btn btn-primary nav-cta">Contact Us</a>
     <button class="nav-cart" aria-label="View cart">
       <i class="fas fa-cart-shopping"></i>
       <span class="cart-badge" id="cart-badge">0</span>
@@ -287,6 +285,135 @@
     © 2026 Oryon Technologies. All Rights Reserved.
   </div>
 </footer>
+
+<!-- ================= DETAIL MODAL (shared shell) ================= -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-modal" role="dialog" aria-modal="true">
+    <button class="detail-close" id="detail-close" aria-label="Close"><i class="fas fa-xmark"></i></button>
+    <div id="detail-modal-body"><!-- content injected here on click --></div>
+  </div>
+</div>
+
+<!-- ================= DETAIL TEMPLATES (edit content here) ================= -->
+<template id="ach-1-detail">
+  <div class="detail-media"><img src="images/AUDAPS 2.png" alt="Best Robotics Innovation Award ceremony"></div>
+  <div class="detail-icon"><i class="fas fa-trophy"></i></div>
+  <span class="detail-tag">2024 &middot; Award</span>
+  <h2>Best Robotics Innovation Award</h2>
+  <p>Oryon Technologies was awarded "Best Robotics Innovation" at the Regional Tech Innovation
+     Summit, recognizing AUDAPS — our autonomous underwater data acquisition system — as a
+     standout example of applied engineering solving real environmental monitoring challenges.</p>
+  <h4>Why it was recognized</h4>
+  <ul class="detail-list">
+    <li>Novel modular sensor architecture for underwater deployment</li>
+    <li>Low-cost design compared to commercial alternatives</li>
+    <li>Demonstrated real-world data collection accuracy in field trials</li>
+  </ul>
+  <h4>Related</h4>
+  <ul class="detail-tags">
+    <li>Robotics</li><li>AUDAPS</li><li>Environmental Monitoring</li>
+  </ul>
+</template>
+
+<template id="ach-2-detail">
+  <div class="detail-media"><img src="images/WhatsApp Image 2026-07-13 at 1.22.25 PM.jpeg" alt="TechCrunch India feature"></div>
+  <div class="detail-icon"><i class="fas fa-newspaper"></i></div>
+  <span class="detail-tag">2023 &middot; Media Feature</span>
+  <h2>Featured in TechCrunch India</h2>
+  <p>Our approach to building affordable, classroom-ready IoT and robotics kits was profiled
+     in a national technology publication, highlighting how Oryon Technologies bridges the gap
+     between commercial-grade components and school-level engineering education.</p>
+  <h4>Coverage highlights</h4>
+  <ul class="detail-list">
+    <li>Interview on accessible STEM education in Tamil Nadu</li>
+    <li>Feature on the St. Antony's School robotics program</li>
+    <li>Spotlight on locally sourced, low-cost sensor kits</li>
+  </ul>
+  <h4>Related</h4>
+  <ul class="detail-tags">
+    <li>IoT Education</li><li>Media</li><li>STEM</li>
+  </ul>
+</template>
+
+<template id="ach-3-detail">
+  <div class="detail-media"><img src="images/WhatsApp Image 2026-07-13 at 1.23.03 PM.jpeg" alt="Robotics certifications ceremony"></div>
+  <div class="detail-icon"><i class="fas fa-graduation-cap"></i></div>
+  <span class="detail-tag">2022 – 2024 &middot; Education Milestone</span>
+  <h2>500+ Students Certified</h2>
+  <p>Through hands-on robotics and embedded systems training programs delivered at partner
+     schools, Oryon Technologies has certified over 500 students in practical engineering
+     fundamentals — from circuit assembly to basic programming and sensor integration.</p>
+  <h4>Program highlights</h4>
+  <ul class="detail-list">
+    <li>Project-based curriculum covering robotics and IoT basics</li>
+    <li>Certification issued on successful completion of a capstone project</li>
+    <li>Ongoing partnership with St. Antony's School since 2022</li>
+  </ul>
+  <h4>Related</h4>
+  <ul class="detail-tags">
+    <li>Education</li><li>Robotics Training</li><li>Certification</li>
+  </ul>
+</template>
+
+<template id="ach-4-detail">
+  <div class="detail-media"><img src="images/WhatsApp Image 2026-07-13 at 1.23.04 PM.jpeg" alt="Smart City IoT Summit award"></div>
+  <div class="detail-icon"><i class="fas fa-city"></i></div>
+  <span class="detail-tag">2023 &middot; Award</span>
+  <h2>IoT Excellence Award — Smart City Summit</h2>
+  <p>Recognized at the Smart City Summit for deploying a low-power environmental monitoring
+     sensor network capable of tracking air quality and water parameters across a pilot zone,
+     supporting municipal sustainability initiatives.</p>
+  <h4>Project scope</h4>
+  <ul class="detail-list">
+    <li>Multi-node sensor network with centralized dashboard</li>
+    <li>Real-time air and water quality tracking</li>
+    <li>Solar-assisted power design for remote nodes</li>
+  </ul>
+  <h4>Related</h4>
+  <ul class="detail-tags">
+    <li>IoT</li><li>Smart Cities</li><li>Sustainability</li>
+  </ul>
+</template>
+
+<template id="ach-5-detail">
+  <div class="detail-media"><img src="images/AUDAPS.png" alt="Underwater Sensor Array patent diagram"></div>
+  <div class="detail-icon"><i class="fas fa-lightbulb"></i></div>
+  <span class="detail-tag">2024 &middot; Intellectual Property</span>
+  <h2>Patent Filed: Underwater Sensor Array</h2>
+  <p>Oryon Technologies filed a provisional patent application for a modular underwater
+     sensor array design — the same core technology used in AUDAPS — enabling flexible
+     reconfiguration of sensor payloads depending on the monitoring task.</p>
+  <h4>Key innovation</h4>
+  <ul class="detail-list">
+    <li>Modular, swappable sensor housing design</li>
+    <li>Pressure-tolerant sealing suitable for shallow to mid-depth waters</li>
+    <li>Reduced manufacturing cost versus fixed-array alternatives</li>
+  </ul>
+  <h4>Related</h4>
+  <ul class="detail-tags">
+    <li>Patent</li><li>Hardware Design</li><li>AUDAPS</li>
+  </ul>
+</template>
+
+<template id="ach-6-detail">
+  <div class="detail-media"><img src="images/WhatsApp Image 2026-07-13 at 1.22.25 PM (1).jpeg" alt="St. Antony's School partnership signing"></div>
+  <div class="detail-icon"><i class="fas fa-handshake"></i></div>
+  <span class="detail-tag">2022 &middot; Partnership</span>
+  <h2>Official Partnership with St. Antony's School</h2>
+  <p>Oryon Technologies formalized an ongoing partnership with St. Antony's School to deliver
+     structured, hands-on robotics education, providing consistent access to hardware kits,
+     curriculum, and mentorship for students.</p>
+  <h4>What the partnership includes</h4>
+  <ul class="detail-list">
+    <li>Weekly robotics lab sessions on school premises</li>
+    <li>Shared equipment library of dev boards and sensors</li>
+    <li>Joint showcase events for student projects</li>
+  </ul>
+  <h4>Related</h4>
+  <ul class="detail-tags">
+    <li>Partnership</li><li>Education</li><li>Community</li>
+  </ul>
+</template>
 
 <script src="scripts.js"></script>
 </body>

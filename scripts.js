@@ -11,19 +11,21 @@ onScroll();
 const menuBtn = document.getElementById('menu-btn');
 const navLinks = document.getElementById('nav-links');
 
-menuBtn.addEventListener('click', () => {
-  const isActive = navLinks.classList.toggle('active');
-  menuBtn.setAttribute('aria-expanded', isActive);
-  menuBtn.innerHTML = isActive ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-bars"></i>';
-});
-
-navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('active');
-    menuBtn.setAttribute('aria-expanded', false);
-    menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+if (menuBtn && navLinks) {
+  menuBtn.addEventListener('click', () => {
+    const isActive = navLinks.classList.toggle('active');
+    menuBtn.setAttribute('aria-expanded', isActive);
+    menuBtn.innerHTML = isActive ? '<i class="fas fa-xmark"></i>' : '<i class="fas fa-bars"></i>';
   });
-});
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+      menuBtn.setAttribute('aria-expanded', false);
+      menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    });
+  });
+}
 
 // ================= SCROLL REVEAL (progressive enhancement) =================
 const revealEls = document.querySelectorAll('.reveal');
@@ -190,58 +192,167 @@ const renderCart = () => {
   });
 };
 
-// Product quantity card selectors logic
-document.querySelectorAll('.product-card').forEach(card => {
-  const minusBtn = card.querySelector('.qty-minus');
-  const plusBtn = card.querySelector('.qty-plus');
-  const qtyInput = card.querySelector('.qty-input');
+// Global helper for adding items to the cart
+const addToCart = (name, price, icon, qtyToAdd = 1, btn = null, qtyInput = null) => {
+  const cart = getCart();
+  const existing = cart.find(i => i.name === name);
+  if (existing) existing.qty += qtyToAdd;
+  else cart.push({ name, price, icon, qty: qtyToAdd });
+  saveCart(cart);
+  renderCart();
 
-  if (minusBtn && plusBtn && qtyInput) {
+  if (qtyInput) qtyInput.value = 1;
+
+  if (btn) {
+    if (btn.classList.contains('added')) return;
+    btn.classList.add('added');
+    const label = btn.querySelector('.cta-label');
+    const originalText = label ? label.textContent : btn.innerHTML;
+    
+    if (label) {
+      label.textContent = 'Added';
+    } else {
+      btn.innerHTML = 'Added <i class="fas fa-check"></i>';
+    }
+    
+    setTimeout(() => {
+      btn.classList.remove('added');
+      if (label) {
+        label.textContent = originalText;
+      } else {
+        btn.innerHTML = originalText;
+      }
+    }, 1400);
+  }
+
+  // Automatically slide out the cart drawer
+  openCart();
+};
+
+const getApiUrl = (path) => {
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || !window.location.hostname;
+  const base = isLocal ? 'http://localhost:5000' : '';
+  return `${base}${path}`;
+};
+
+// Fallback hardcoded product list in case backend is offline
+const fallbackProducts = [
+  {
+    name: "WORK STATION (For Kids)",
+    price: 1000.00,
+    icon: "fas fa-briefcase",
+    tag: "Electronics Kit",
+    description: "A fun and educational workshop organizer specifically designed for kids. It helps children learn the basics of assembly, organization, and safety when working on small electronics and robotics projects.",
+    features: ["Built-in tool storage slots and compartments", "Sturdy, child-safe structural material", "Perfect companion for DIY electronics projects"],
+    image_url: "images/WhatsApp Image 2026-07-13 at 1.22.24 PM.jpeg"
+  },
+  {
+    name: "IOT Trainer Kit",
+    price: 5299.00,
+    icon: "fas fa-microchip",
+    tag: "IoT Development",
+    description: "A comprehensive educational trainer kit for learning IoT concepts and cloud integrations. Equipped with development boards and a wide array of sensors.",
+    features: ["ESP32 core development board with Wi-Fi & Bluetooth", "Sensors: Temperature, Humidity, Soil Moisture, and Ultrasonic", "128x64 OLED Display and dynamic RGB LED controls", "Full guide and code templates included"],
+    image_url: "images/IOT Trainer Kit.png"
+  },
+  {
+    name: "AUDAPS — Underwater Platform",
+    price: 12000.00,
+    icon: "fas fa-water",
+    tag: "Marine Technology",
+    description: "Our premier autonomous data collection platform designed for sub-surface monitoring. Configurable with custom scientific sensor payloads.",
+    features: ["IP68 rated modular structural body", "Sensors: Water Temperature, Turbidity, and pH levels", "Continuous data logging to internal flash memory", "Wireless data transmission when surfaced"],
+    image_url: "images/AUDAPS 3.png"
+  },
+  {
+    name: "Robotic Dog Kit",
+    price: 1000.00,
+    icon: "fas fa-dog",
+    tag: "Robotics Kit",
+    description: "An interactive, quadruped robot kit that teaches servo control, motor alignment, and basic walk cycle coding.",
+    features: ["4-legged chassis with SG90 micro servos", "Ultrasonic sensor for obstacle avoidance", "Programmable walk, sit, and dance sequences", "Easy assembly with screw-together parts"],
+    image_url: "images/Robotic dog.png"
+  }
+];
+
+let productsList = [];
+
+// Fetch products from Python server or use fallback
+const loadProducts = async () => {
+  const grid = document.getElementById('shop-grid');
+  if (!grid) return;
+
+  try {
+    const res = await fetch(getApiUrl('/api/products'));
+    if (!res.ok) throw new Error('API server returned error');
+    productsList = await res.json();
+  } catch (err) {
+    console.warn("Backend server offline, falling back to local products:", err);
+    productsList = fallbackProducts;
+  }
+
+  // Render the products
+  renderShopGrid(grid);
+};
+
+const renderShopGrid = (grid) => {
+  grid.innerHTML = '';
+  productsList.forEach((prod) => {
+    const card = document.createElement('div');
+    card.className = 'product-card reveal';
+    card.innerHTML = `
+      <div class="product-media" style="cursor: pointer;">
+        <img src="${prod.image_url}" alt="${prod.name}">
+      </div>
+      <div class="product-body">
+        <span class="product-name">${prod.name}</span>
+        <span class="product-vendor">Oryon Technologies</span>
+        <span class="product-price">${formatPrice(prod.price)}</span>
+        <div class="product-quantity">
+          <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+          <input type="number" class="qty-input" value="1" min="1" readonly>
+          <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+        </div>
+        <button class="add-to-cart">
+          <i class="fas fa-cart-plus"></i><i class="fas fa-check"></i>
+          <span class="cta-label">Add to Cart</span>
+        </button>
+        <span class="product-more">View details <i class="fas fa-arrow-right"></i></span>
+      </div>
+    `;
+
+    // Add event listeners for this product card
+    const media = card.querySelector('.product-media');
+    const moreLink = card.querySelector('.product-more');
+    const minusBtn = card.querySelector('.qty-minus');
+    const plusBtn = card.querySelector('.qty-plus');
+    const qtyInput = card.querySelector('.qty-input');
+    const addBtn = card.querySelector('.add-to-cart');
+
+    // Click card or link to open details
+    const openProductDetails = () => openDetail(prod);
+    media.addEventListener('click', openProductDetails);
+    moreLink.addEventListener('click', openProductDetails);
+
+    // Quantity selectors
     minusBtn.addEventListener('click', () => {
       let val = parseInt(qtyInput.value) || 1;
-      if (val > 1) {
-        qtyInput.value = val - 1;
-      }
+      if (val > 1) qtyInput.value = val - 1;
     });
     plusBtn.addEventListener('click', () => {
       let val = parseInt(qtyInput.value) || 1;
       qtyInput.value = val + 1;
     });
-  }
-});
 
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (btn.classList.contains('added')) return;
-    const name  = btn.dataset.name;
-    const price = parseFloat(btn.dataset.price);
-    const icon  = btn.dataset.icon;
-    
-    // Get quantity from the input
-    const card = btn.closest('.product-card');
-    const qtyInput = card ? card.querySelector('.qty-input') : null;
-    const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
+    // Add to cart button
+    addBtn.addEventListener('click', () => {
+      const qtyToAdd = parseInt(qtyInput.value) || 1;
+      addToCart(prod.name, prod.price, prod.icon, qtyToAdd, addBtn, qtyInput);
+    });
 
-    const cart = getCart();
-    const existing = cart.find(i => i.name === name);
-    if (existing) existing.qty += qtyToAdd;
-    else cart.push({ name, price, icon, qty: qtyToAdd });
-    saveCart(cart);
-    renderCart();
-
-    // Reset product quantity input to 1 after adding
-    if (qtyInput) qtyInput.value = 1;
-
-    btn.classList.add('added');
-    const label = btn.querySelector('.cta-label');
-    const original = label ? label.textContent : null;
-    if (label) label.textContent = 'Added';
-    setTimeout(() => {
-      btn.classList.remove('added');
-      if (label && original) label.textContent = original;
-    }, 1400);
+    grid.appendChild(card);
   });
-});
+};
 
 const openCart = () => {
   cartDrawer?.classList.add('open');
@@ -258,17 +369,55 @@ document.querySelector('.nav-cart')?.addEventListener('click', openCart);
 document.getElementById('cart-close')?.addEventListener('click', closeCart);
 cartOverlay?.addEventListener('click', closeCart);
 
+// Checkout handler with Python Flask integration
 const checkoutBtn = document.getElementById('cart-checkout');
 if (checkoutBtn) {
-  checkoutBtn.addEventListener('click', () => {
-    const original = checkoutBtn.innerHTML;
-    checkoutBtn.innerHTML = 'This is a demo site';
+  checkoutBtn.addEventListener('click', async () => {
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    const originalText = checkoutBtn.innerHTML;
+    checkoutBtn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
     checkoutBtn.disabled = true;
-    setTimeout(() => { checkoutBtn.innerHTML = original; checkoutBtn.disabled = false; }, 2000);
+
+    try {
+      const res = await fetch(getApiUrl('/api/orders'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ items: cart })
+      });
+
+      if (!res.ok) throw new Error('Order submission failed');
+      const result = await res.json();
+
+      if (result.success) {
+        // Clear cart on success
+        saveCart([]);
+        renderCart();
+
+        // Close drawer and show success alert
+        closeCart();
+        alert(`Order Placed Successfully!\n\nOrder ID: ${result.order_id}\nTotal Price: ${formatPrice(result.total_price)}\n\nThank you for shopping with Oryon Technologies.`);
+      }
+    } catch (err) {
+      console.warn("Backend server offline, performing client-side mock checkout:", err);
+      // Fallback checkout for demo site if API server is offline
+      setTimeout(() => {
+        saveCart([]);
+        renderCart();
+        closeCart();
+        alert("Demo Checkout Success! Order saved locally on your device since the backend server is offline.");
+        checkoutBtn.innerHTML = originalText;
+        checkoutBtn.disabled = false;
+      }, 1500);
+    }
   });
 }
 
 renderCart();
+loadProducts(); // Load products dynamically on startup
 
 // ================= NEWSLETTER FORM (demo submit) =================
 const newsletterForm = document.getElementById('newsletter-form');
@@ -290,90 +439,93 @@ if (newsletterForm) {
   });
 }
 
-// ================= DETAIL MODAL (Achievements / Projects) =================
-// Works on any page that has: #detail-overlay, #detail-modal-body, #detail-close
-// and cards with [data-detail="template-id"] pointing to a <template id="template-id"> block.
+// ================= DETAIL MODAL (Achievements / Projects / Products) =================
 const detailOverlay   = document.getElementById('detail-overlay');
 const detailModalBody = document.getElementById('detail-modal-body');
 const detailClose     = document.getElementById('detail-close');
 
-const openDetail = (templateId) => {
-  const tpl = document.getElementById(templateId);
-  if (!tpl || !detailModalBody || !detailOverlay) return;
+const openDetail = (target) => {
+  if (!detailModalBody || !detailOverlay) return;
   detailModalBody.innerHTML = '';
-  detailModalBody.appendChild(tpl.content.cloneNode(true));
 
-  // Attach dynamic event listeners for the quantity selector inside the modal
-  const minusBtn = detailModalBody.querySelector('.qty-minus');
-  const plusBtn = detailModalBody.querySelector('.qty-plus');
-  const qtyInput = detailModalBody.querySelector('.qty-input');
+  if (typeof target === 'string') {
+    // Static template (achievements or projects)
+    const tpl = document.getElementById(target);
+    if (!tpl) return;
+    detailModalBody.appendChild(tpl.content.cloneNode(true));
+  } else {
+    // Dynamic product object from backend
+    const product = target;
+    const featuresHTML = product.features.map(f => `<li>${f}</li>`).join('');
+    detailModalBody.innerHTML = `
+      <div class="detail-media"><img src="${product.image_url}" alt="${product.name}"></div>
+      <div class="detail-icon"><i class="${product.icon}"></i></div>
+      <span class="detail-tag">${product.tag}</span>
+      <h2>${product.name}</h2>
+      <p class="detail-price">Price: ${formatPrice(product.price)}</p>
+      <p>${product.description}</p>
+      <h4>Features &amp; Specifications</h4>
+      <ul class="detail-list">
+        ${featuresHTML}
+      </ul>
+      <div class="product-quantity" style="margin-bottom: 16px;">
+        <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity"><i class="fas fa-minus"></i></button>
+        <input type="number" class="qty-input" value="1" min="1" readonly>
+        <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity"><i class="fas fa-plus"></i></button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary modal-buy-now">Buy Now</button>
+        <button class="btn btn-ghost modal-add-to-cart">Add to Cart</button>
+      </div>
+    `;
 
-  if (minusBtn && plusBtn && qtyInput) {
-    minusBtn.addEventListener('click', () => {
-      let val = parseInt(qtyInput.value) || 1;
-      if (val > 1) {
-        qtyInput.value = val - 1;
-      }
-    });
-    plusBtn.addEventListener('click', () => {
-      let val = parseInt(qtyInput.value) || 1;
-      qtyInput.value = val + 1;
-    });
+    // Dynamic bindings for product details modal
+    const minusBtn = detailModalBody.querySelector('.qty-minus');
+    const plusBtn = detailModalBody.querySelector('.qty-plus');
+    const qtyInput = detailModalBody.querySelector('.qty-input');
+    const modalAddToCartBtn = detailModalBody.querySelector('.modal-add-to-cart');
+    const modalBuyNowBtn = detailModalBody.querySelector('.modal-buy-now');
+
+    if (minusBtn && plusBtn && qtyInput) {
+      minusBtn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val > 1) qtyInput.value = val - 1;
+      });
+      plusBtn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        qtyInput.value = val + 1;
+      });
+    }
+
+    if (modalAddToCartBtn) {
+      modalAddToCartBtn.addEventListener('click', () => {
+        const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
+        addToCart(product.name, product.price, product.icon, qtyToAdd, modalAddToCartBtn, qtyInput);
+      });
+    }
+
+    if (modalBuyNowBtn) {
+      modalBuyNowBtn.addEventListener('click', () => {
+        const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
+        addToCart(product.name, product.price, product.icon, qtyToAdd);
+        closeDetail();
+        openCart();
+      });
+    }
   }
 
-  // Attach dynamic event listeners for Buy Now & Add to Cart buttons inside the modal
-  const modalAddToCartBtn = detailModalBody.querySelector('.modal-add-to-cart');
-  const modalBuyNowBtn = detailModalBody.querySelector('.modal-buy-now');
-
-  if (modalAddToCartBtn) {
-    modalAddToCartBtn.addEventListener('click', () => {
-      const name = modalAddToCartBtn.dataset.name;
-      const price = parseFloat(modalAddToCartBtn.dataset.price);
-      const icon = modalAddToCartBtn.dataset.icon;
-      const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
-      
-      const cart = getCart();
-      const existing = cart.find(i => i.name === name);
-      if (existing) existing.qty += qtyToAdd;
-      else cart.push({ name, price, icon, qty: qtyToAdd });
-      saveCart(cart);
-      renderCart();
-
-      // Reset quantity input to 1 after adding
-      if (qtyInput) qtyInput.value = 1;
-
-      // Temporarily change button to "Added" state
-      const originalText = modalAddToCartBtn.innerHTML;
-      modalAddToCartBtn.innerHTML = 'Added <i class="fas fa-check"></i>';
-      modalAddToCartBtn.classList.add('added');
-      modalAddToCartBtn.disabled = true;
-      setTimeout(() => {
-        modalAddToCartBtn.innerHTML = originalText;
-        modalAddToCartBtn.classList.remove('added');
-        modalAddToCartBtn.disabled = false;
-      }, 1400);
+  // Bind static quantity selectors for achievements/projects templates if they exist
+  const minusBtnTpl = detailModalBody.querySelector('.qty-minus');
+  const plusBtnTpl = detailModalBody.querySelector('.qty-plus');
+  const qtyInputTpl = detailModalBody.querySelector('.qty-input');
+  if (minusBtnTpl && plusBtnTpl && qtyInputTpl && typeof target === 'string') {
+    minusBtnTpl.addEventListener('click', () => {
+      let val = parseInt(qtyInputTpl.value) || 1;
+      if (val > 1) qtyInputTpl.value = val - 1;
     });
-  }
-
-  if (modalBuyNowBtn) {
-    modalBuyNowBtn.addEventListener('click', () => {
-      const name = modalBuyNowBtn.dataset.name;
-      const price = parseFloat(modalBuyNowBtn.dataset.price);
-      const icon = modalBuyNowBtn.dataset.icon;
-      const qtyToAdd = qtyInput ? parseInt(qtyInput.value) : 1;
-      
-      const cart = getCart();
-      const existing = cart.find(i => i.name === name);
-      if (existing) existing.qty += qtyToAdd;
-      else cart.push({ name, price, icon, qty: qtyToAdd });
-      saveCart(cart);
-      renderCart();
-
-      // Close details modal
-      closeDetail();
-
-      // Open cart drawer
-      openCart();
+    plusBtnTpl.addEventListener('click', () => {
+      let val = parseInt(qtyInputTpl.value) || 1;
+      qtyInputTpl.value = val + 1;
     });
   }
 
@@ -386,6 +538,7 @@ const closeDetail = () => {
   document.body.style.overflow = '';
 };
 
+// Bind detail trigger for static list cards (achievements and projects)
 document.querySelectorAll('[data-detail]').forEach(card => {
   card.addEventListener('click', () => openDetail(card.dataset.detail));
   card.addEventListener('keydown', (e) => {
